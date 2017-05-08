@@ -1,0 +1,10 @@
+# Qt
+*.pro.user*
+build*
+
+# gcc
+*.o
+.deps
+
+doxygen/
+Makefile
