@@ -8,8 +8,7 @@
 
 namespace rclog {
 
-using boost::asio::ip::udp;
-
+using boost::asio::local::datagram_protocol;
 
 class LocalServer {
 public:
@@ -21,8 +20,8 @@ public:
 private:
     void handle_message(boost::system::error_code ec, std::size_t bytes_recvd);
 
-    udp::socket socket_;
-    udp::endpoint sender_endpoint_;
+    datagram_protocol::socket socket_;
+    datagram_protocol::endpoint sender_endpoint_;
 
     enum { max_length = 1024 };
     char data_[max_length];     // TODO: verify if exceed.
