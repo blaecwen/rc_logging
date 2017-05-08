@@ -3,8 +3,8 @@
 
 namespace rclog {
 
-LocalServer::LocalServer(boost::asio::io_service &io_service, short port)
-    :socket_(io_service, datagram_protocol::endpoint("/tmp/test.socket")) {
+LocalServer::LocalServer(boost::asio::io_service &io_service, std::string socket_path)
+    :socket_(io_service, datagram_protocol::endpoint(socket_path)) {
     do_receive();
 }
 

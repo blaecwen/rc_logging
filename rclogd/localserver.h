@@ -12,7 +12,7 @@ using boost::asio::local::datagram_protocol;
 
 class LocalServer {
 public:
-    LocalServer(boost::asio::io_service& io_service, short port);
+    LocalServer(boost::asio::io_service& io_service, std::string socket_path);
 
     void do_receive();
     void do_send(std::size_t length);
