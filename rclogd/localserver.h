@@ -1,7 +1,10 @@
 #ifndef LOCALSERVER_H
 #define LOCALSERVER_H
 
+#include <iostream>
+#include <boost/bind.hpp>
 #include <boost/asio.hpp>
+
 
 namespace rclog {
 
