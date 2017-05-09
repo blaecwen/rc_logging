@@ -5,7 +5,7 @@
 
 using boost::asio::local::datagram_protocol;
 
-enum { max_length = 1024 };
+enum { max_length = 4096 };
 
 const char *client_socket_basename = "/tmp/rclogger.";
 
@@ -31,10 +31,14 @@ int main(int argc, char* argv[])
     s.bind(client_endpoint);
 
 //    std::cout << "Enter message: ";
-    char request[max_length];
-    std::cin.getline(request, max_length);
-    size_t request_length = std::strlen(request);
-    s.send_to(boost::asio::buffer(request, request_length), endpoint);
+    std::string request_str = "";
+    std::string line;
+    while (std::getline(std::cin, line))
+        request_str += line + "\n";
+
+    if (request_str.length() > max_length)
+        std::cerr << "Error: message to send is greater then max size!" << std::endl;
+    s.send_to(boost::asio::buffer(request_str), endpoint);
 
     char reply[max_length];
     size_t reply_length = s.receive_from(
