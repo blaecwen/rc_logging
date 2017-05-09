@@ -11,8 +11,8 @@ LocalServer::LocalServer(boost::asio::io_service &io_service, std::string socket
 void LocalServer::do_receive() {
     socket_.async_receive_from(boost::asio::buffer(data_, max_length), sender_endpoint_,
                                boost::bind(&LocalServer::handle_message, this,
-                                           boost::asio::placeholders::error(),
-                                           boost::asio::placeholders::bytes_transferred()));
+                                           boost::asio::placeholders::error,
+                                           boost::asio::placeholders::bytes_transferred));
 }
 
 void LocalServer::do_send(const std::string &message) {
@@ -24,7 +24,7 @@ void LocalServer::do_send(const std::string &message) {
       [this, msg](boost::system::error_code /*ec*/, std::size_t /*bytes_sent*/) {});
 }
 
-void LocalServer::handle_message(boost::system::error_code ec, std::size_t bytes_recvd)
+void LocalServer::handle_message(const boost::system::error_code& ec, std::size_t bytes_recvd)
 {
     if (!ec && bytes_recvd > 0) {
         std::cout << "Got: '";
