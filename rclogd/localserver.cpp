@@ -29,9 +29,13 @@ void LocalServer::handle_message(boost::system::error_code ec, std::size_t bytes
         std::cout.write(data_, bytes_recvd);
         std::cout << "'" << std::endl;
         do_send(bytes_recvd);
+        return;
     }
-    else
-        do_receive();
+
+    if (ec == boost::asio::error::message_size)
+        std::cerr << "Error: got message greater then buffer size";    // TODO: send error
+
+    do_receive();
 }
 
 }
