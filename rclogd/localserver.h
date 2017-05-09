@@ -6,6 +6,10 @@
 #include <boost/asio.hpp>
 #include <boost/make_shared.hpp>
 
+#include <sstream>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
 namespace rclog {
 
 using boost::asio::local::datagram_protocol;
