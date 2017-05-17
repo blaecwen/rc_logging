@@ -7,8 +7,12 @@ LIBS += -lboost_system
 LIBS += -lpthread
 
 SOURCES += main.cpp \
-    localserver.cpp
+    localserver.cpp \
+    databasemanager.cpp \
+    mongomanager.cpp
 
 HEADERS += \
-    localserver.h
+    localserver.h \
+    databasemanager.h \
+    mongomanager.h
 

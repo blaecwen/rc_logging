@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "localserver.h"
+#include "mongomanager.h"
 
 int main(int argc, char* argv[]) {
     try {
@@ -9,9 +10,11 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
+        rclog::MongoManager dbManager;
+
         ::unlink(argv[1]);     // NOTE: is it correct behavior?
         boost::asio::io_service io_service;
-        rclog::LocalServer s(io_service, argv[1]);
+        rclog::LocalServer s(io_service, argv[1], dbManager);
         io_service.run();
     }
     catch (std::exception& e) {

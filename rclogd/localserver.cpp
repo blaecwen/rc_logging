@@ -5,8 +5,10 @@
 
 namespace rclog {
 
-LocalServer::LocalServer(boost::asio::io_service &io_service, std::string socket_path)
-    :socket_(io_service, datagram_protocol::endpoint(socket_path)) {
+LocalServer::LocalServer(boost::asio::io_service &io_service, std::string socket_path, DatabaseManager &dbManager)
+    :socket_(io_service, datagram_protocol::endpoint(socket_path)),
+     dbManager(dbManager)
+{
     do_receive();
 }
 
@@ -33,21 +35,7 @@ void LocalServer::handle_message(const boost::system::error_code& ec, std::size_
         std::cout.write(data_, bytes_recvd);
         std::cout << "'" << std::endl;
 
-        // TODO: catch json parse erorr exception: boost::property_tree::json_parser::json_parser_error
-        std::stringstream ss(data_);
-        boost::property_tree::ptree msg_json;
-        boost::property_tree::read_json(ss, msg_json);
-
-        boost::property_tree::ptree root;
-        root.add_child("message", msg_json);
-        root.put("timestamp", "time_now");      // TODO: add current timestamp
-        root.put("node_id", NODE_ID);           // TODO: should get pid of source proccess somehow
-
-        std::stringstream sout;
-        boost::property_tree::write_json(sout, root);
-        std::string res_msg = sout.str();
-        std::cout << res_msg << std::endl;
-
+        dbManager.addDocument(std::string(data_, bytes_recvd) , "producer");
         do_send("ok");
     }
     else if (ec == boost::asio::error::message_size) {       // NOTE: does not work for some reason
