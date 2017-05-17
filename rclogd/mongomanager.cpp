@@ -1,32 +1,33 @@
 #include "mongomanager.h"
 
-#include <iostream>
-
 namespace rclog {
 
 MongoManager::MongoManager()
+    :client(mongocxx::uri{})
 {
-
 }
 
-int MongoManager::addDocument(const std::string &doc, const std::string &producerName)
+int MongoManager::addDocument(const std::string &document, const std::string &producerName)
 {
-    std::cout << "doc: '" << doc << "'\nproducer: '" << producerName << "'" << std::endl;
+    try {
+        bsoncxx::document::value doc = bsoncxx::from_json(document);
+        DOUT << "Parsed doc: " << bsoncxx::to_json(doc.view()) << std::endl;
 
-    // TODO: catch json parse erorr exception: boost::property_tree::json_parser::json_parser_error
-//        std::stringstream ss(data_);
-//        boost::property_tree::ptree msg_json;
-//        boost::property_tree::read_json(ss, msg_json);
+        using bsoncxx::builder::stream::document;
+        using bsoncxx::builder::stream::finalize;
 
-//        boost::property_tree::ptree root;
-//        root.add_child("message", msg_json);
-//        root.put("timestamp", "time_now");      // TODO: add current timestamp
-//        root.put("node_id", NODE_ID);           // TODO: should get pid of source proccess somehow
+        // NOTE: here copy occures. So, if doc is big enough -- it will be slow
+        auto new_doc = document{} << "storage_timestamp" << "TODO" << "message" << doc << finalize;
 
-//        std::stringstream sout;
-//        boost::property_tree::write_json(sout, root);
-//        std::string res_msg = sout.str();
-//        std::cout << res_msg << std::endl;
+        mongocxx::collection collection = client["rclogd"]["local"];
+        collection.insert_one(new_doc.view());
+    } catch (bsoncxx::exception e) {
+        std::cerr << "Error: while adding document from producer '" << producerName << "': " << e.what() << std::endl;
+        return 1;
+    } catch (mongocxx::bulk_write_exception e) {
+        std::cerr << "Error: while adding document from producer '" << producerName << "': " << e.what() << std::endl;
+        return 1;
+    }
 
     return 0;
 }

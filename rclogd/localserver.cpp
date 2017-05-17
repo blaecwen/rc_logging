@@ -31,11 +31,7 @@ void LocalServer::do_send(const std::string &message) {
 void LocalServer::handle_message(const boost::system::error_code& ec, std::size_t bytes_recvd)
 {
     if (!ec && bytes_recvd > 0) {
-        std::cout << "Got: '";
-        std::cout.write(data_, bytes_recvd);
-        std::cout << "'" << std::endl;
-
-        dbManager.addDocument(std::string(data_, bytes_recvd) , "producer");
+        dbManager.addDocument(std::string(data_, bytes_recvd) , "producer");    // TODO: here goes coping. Should avoid it!
         do_send("ok");
     }
     else if (ec == boost::asio::error::message_size) {       // NOTE: does not work for some reason
