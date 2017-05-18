@@ -6,6 +6,7 @@ CONFIG -= qt
 
 LIBS += -lboost_system
 LIBS += -lpthread
+LIBS += -lboost_program_options
 LIBS += -lmongocxx -lbsoncxx
 
 # used for enabling DEBUG logging
