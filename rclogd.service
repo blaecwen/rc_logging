@@ -3,7 +3,7 @@ Description=Robotic System Logging Service
 Documentation=https://github.com/blaecwen/rc_logging
 
 [Service]
-Type=simple
+Type=notify
 User=rclog
 Group=rclog
 ExecStart=/usr/local/bin/rclogd -c /etc/rclog/rclogd.cfg

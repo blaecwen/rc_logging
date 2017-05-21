@@ -8,6 +8,7 @@ LIBS += -lboost_system
 LIBS += -lpthread
 LIBS += -lboost_program_options
 LIBS += -lmongocxx -lbsoncxx
+LIBS += -lsystemd
 
 # used for enabling DEBUG logging
 DEFINES += DEBUG

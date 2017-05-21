@@ -7,6 +7,8 @@
 #include <memory>
 #include <boost/program_options.hpp>
 
+#include <systemd/sd-daemon.h>
+
 namespace po = boost::program_options;
 
 const char help_message[] = "rclogd -- service managing logs on robotic node system. "
@@ -118,7 +120,14 @@ int main(int argc, char* argv[]) {
         }
         boost::asio::io_service io_service;
         rclog::LocalServer s(io_service, socket, *dbManager);
+
+        sd_notifyf(0, "READY=1\n"
+                      "STATUS=Processing requests...\n"
+                      "MAINPID=%lu",
+                      (unsigned long) getpid());
+
         io_service.run();
+
     }
     catch (po::unknown_option& e) {
         std::cerr << "Error parsing command line or config file: " << e.what() << "\n";

@@ -16,9 +16,11 @@ mkdir -p build-rclogd && cd build-rclogd && qmake ../rclogd/rclogd.pro
 make
 cd .. && sudo ./install.sh install
 ```
-3. Запустить скрипт install.sh
+3. Готово. rclogd запущен как сервис.
 
 Зависимости:
-1. boost
-2. libmongoc
-3. libmongocxx
+1. libboost_system
+2. libboost_program_options
+3. libmongoc
+4. libmongocxx
+5. libsystemd-dev
