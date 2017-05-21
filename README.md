@@ -1,4 +1,5 @@
-Это репозиторий с распределенной системой логирования.
+# RC_LOGGING
+rc_logging -- система сборки логов для распределенных робототехнических комплексов
 
 Состоит из двух программ:
 1. rclogd -- демон, выполняет следующие функции: 
@@ -7,7 +8,7 @@
     b) Выполняет обмен логами с другими узлами.
 2. rclogger -- клиент, для отправки логов в rclogd. Является примером взаимодействия локального процесса с rclogd.
 
-Установка:
+## Установка
 1. Установить зависимости
 2. Загрузить репозиторий и скомпилировать rclogd, пример для bash:
 ```
@@ -18,9 +19,18 @@ cd .. && sudo ./install.sh install
 ```
 3. Готово. rclogd запущен как сервис.
 
-Зависимости:
+## Зависимости
 1. libboost_system
 2. libboost_program_options
 3. libmongoc
 4. libmongocxx
 5. libsystemd-dev
+
+
+## Authors
+
+* **Dmitry Liman** - *Initial work* - [blaecwen](https://github.com/blaecwen)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
