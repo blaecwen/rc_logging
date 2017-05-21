@@ -1,0 +1,13 @@
+[Unit]
+Description=Robotic System Logging Service
+Documentation=https://github.com/blaecwen/rc_logging
+
+[Service]
+Type=simple
+User=rclog
+Group=rclog
+ExecStart=/usr/local/bin/rclogd -c /etc/rclog/rclogd.cfg
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
