@@ -1,14 +1,14 @@
 #include "localserver.h"
 
-// TODO: specify it in cmd args
-#define NODE_ID 1
 
 namespace rclog {
 
-LocalServer::LocalServer(boost::asio::io_service &io_service, std::string socket_path, DatabaseManager &dbManager)
+LocalServer::LocalServer(boost::asio::io_service &io_service, const std::string& socket_path,
+                         DatabaseManager &dbManager)
     :socket_(io_service, datagram_protocol::endpoint(socket_path)),
-     dbManager(dbManager)
+     dbManager_(dbManager)
 {
+    std::cerr << "Listening UNIX domain socket '" << socket_path << "' for local connections" << std::endl;
     do_receive();
 }
 
@@ -31,7 +31,7 @@ void LocalServer::do_send(const std::string &message) {
 void LocalServer::handle_message(const boost::system::error_code& ec, std::size_t bytes_recvd)
 {
     if (!ec && bytes_recvd > 0) {
-        dbManager.addDocument(std::string(data_, bytes_recvd) , "producer");    // TODO: here goes coping. Should avoid it!
+        dbManager_.addDocument(std::string(data_, bytes_recvd) , "producer");    // TODO: here goes coping. Should avoid it!
         do_send("ok");
     }
     else if (ec == boost::asio::error::message_size) {       // NOTE: does not work for some reason

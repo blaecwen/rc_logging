@@ -9,8 +9,6 @@
 
 namespace po = boost::program_options;
 
-// TODO: dbms should be one of constants. Maybe could be done using notify!
-
 const char help_message[] = "rclogd -- service managing logs on robotic node system. "
                             "It is a part of distributed robotic log delivery system\n\n"
                             "Usage:\n"
@@ -101,9 +99,11 @@ int main(int argc, char* argv[]) {
         if (ec < 0)
             return 0;
 
+        std::cerr << version_message << std::endl;
+
         std::shared_ptr<rclog::DatabaseManager> dbManager;
         if (vm["dbms"].as<std::string>() == "mongodb") {
-            dbManager = std::make_shared<rclog::MongoManager>();
+            dbManager = std::make_shared<rclog::MongoManager>(vm["id"].as<std::string>());
         }
         else {
             std::cerr << "Unknown database specified, valid values: mongodb\n";
@@ -111,8 +111,11 @@ int main(int argc, char* argv[]) {
         }
 
         std::string socket = vm["socket"].as<std::string>();
-        if(vm["socket-takeover"].as<bool>())
-            ::unlink(socket.c_str());     // NOTE: is it correct behavior?
+        if(vm["socket-takeover"].as<bool>()) {
+            std::cerr << "Warning: --socket-takeover option was specified. Taking over socket file '"
+                      << socket << "'. This file could be used by other process." << "\n";
+            ::unlink(socket.c_str());           // NOTE: is it correct behavior?
+        }
         boost::asio::io_service io_service;
         rclog::LocalServer s(io_service, socket, *dbManager);
         io_service.run();

@@ -20,7 +20,7 @@ namespace rclog {
 class MongoManager : public DatabaseManager
 {
 public:
-    MongoManager();
+    MongoManager(const std::string &node_id);
 
     int addDocument(const std::string &document, const std::string &producerName) override;
 
