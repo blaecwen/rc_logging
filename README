@@ -7,6 +7,16 @@
     b) Выполняет обмен логами с другими узлами.
 2. rclogger -- клиент, для отправки логов в rclogd. Является примером взаимодействия локального процесса с rclogd.
 
+Установка:
+1. Установить зависимости
+2. Загрузить репозиторий и скомпилировать rclogd, пример для bash:
+```
+git clone https://github.com/blaecwen/rc_logging.git && cd rc_logging
+mkdir -p build-rclogd && cd build-rclogd && qmake ../rclogd/rclogd.pro
+make
+cd .. && sudo ./install.sh install
+```
+3. Запустить скрипт install.sh
 
 Зависимости:
 1. boost
