@@ -19,10 +19,13 @@ int MongoManager::addDocument(const std::string &document, const std::string &pr
         using bsoncxx::builder::stream::finalize;
 
         // NOTE: here copy occures. So, if doc is big enough -- it will be slow
-        auto new_doc = document{} << "storage_timestamp" << "TODO" << "message" << doc << finalize;
+        auto new_doc = document{} << "node_id" << node_id_
+                                  << "storage_timestamp" << bsoncxx::types::b_date(std::chrono::system_clock::now())
+                                  << "process_name" << "TODO"
+                                  << "message" << doc << finalize;
 
         // NOTE: is it efficient? may be it is better to save mongocxx::collection handle in members of the class
-        mongocxx::collection collection = client["rclogd"]["local"];
+        mongocxx::collection collection = client["rclogd"][node_id_];
         collection.insert_one(new_doc.view());
     } catch (bsoncxx::exception e) {
         std::cerr << "Error: while adding document from producer '" << producerName << "': " << e.what() << std::endl;
