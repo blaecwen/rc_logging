@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "discoveryserver.h"
 #include "localserver.h"
 #include "mongomanager.h"
 
@@ -92,6 +93,7 @@ int readOptions(int argc, char* argv[], po::variables_map &vm) {
     return 0;
 }
 
+
 int main(int argc, char* argv[]) {
     try {
         po::variables_map vm;
@@ -120,6 +122,7 @@ int main(int argc, char* argv[]) {
         }
         boost::asio::io_service io_service;
         rclog::LocalServer s(io_service, socket, *dbManager);
+        rclog::DiscoveryServer d(io_service, "239.255.0.1", 32128, 5);
 
         sd_notifyf(0, "READY=1\n"
                       "STATUS=Processing requests...\n"

@@ -19,11 +19,13 @@ INCLUDEPATH += /usr/include/bsoncxx/v_noabi
 SOURCES += main.cpp \
     localserver.cpp \
     databasemanager.cpp \
-    mongomanager.cpp
+    mongomanager.cpp \
+    discoveryserver.cpp
 
 HEADERS += \
     localserver.h \
     databasemanager.h \
     mongomanager.h \
-    utils.hpp
+    utils.hpp \
+    discoveryserver.h
 
