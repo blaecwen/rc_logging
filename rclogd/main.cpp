@@ -52,9 +52,26 @@ int readOptions(int argc, char* argv[], po::variables_map &vm) {
         ("priority,p", po::value<int>()->required(),
               "Priority of robotic node.\nUsed by nodes to deside who should be master in PtP connection\n");
 
-    // group all possible options
+    po::options_description discovery("Nodes discovery configuration");
+    discovery.add_options()
+        ("multicast-address", po::value<std::string>()->required(),
+              "Destination address used for sending multicast hello messages\n")
+        ("multicast-port", po::value<int>()->required(),
+              "Port used for sending multicast hello messages\n")
+        ("enable-loopback",
+              po::value<bool>()->implicit_value(true, "")->default_value(false, "")->value_name(" "),
+              "Receive hello messages sent by local processes. Can be used for debugging\n")
+        ("hello-interval", po::value<int>()->required()->value_name("seconds"),
+              "Defines how often hello messages should be sent\n");
+
+
+    // options that can be specified in command line args
     po::options_description cmdline_options;
-    cmdline_options.add(generic).add(config);
+    cmdline_options.add(generic).add(config).add(discovery);
+
+    // options that can be specified in file
+    po::options_description file_options;
+    file_options.add(config).add(discovery);
 
 
     // first load only generic options
@@ -87,7 +104,7 @@ int readOptions(int argc, char* argv[], po::variables_map &vm) {
 
     // load all options
     po::store(po::command_line_parser(argc, argv).options(cmdline_options).run(), vm);
-    po::store(po::parse_config_file(ifs, config), vm);
+    po::store(po::parse_config_file(ifs, file_options), vm);
     po::notify(vm);
 
     return 0;
@@ -122,7 +139,15 @@ int main(int argc, char* argv[]) {
         }
         boost::asio::io_service io_service;
         rclog::LocalServer s(io_service, socket, *dbManager);
-        rclog::DiscoveryServer d(io_service, "239.255.0.1", 32128, 5);
+
+        rclog::DiscoveryServer::params p;
+        p.multicast_address = vm["multicast-address"].as<std::string>();
+        p.multicast_port = vm["multicast-port"].as<int>();
+        p.node_id = vm["id"].as<std::string>();
+        p.priority = vm["priority"].as<int>();
+        p.interval = vm["hello-interval"].as<int>();
+        p.enable_loopback = vm["enable-loopback"].as<bool>();
+        rclog::DiscoveryServer d(io_service, p);
 
         sd_notifyf(0, "READY=1\n"
                       "STATUS=Processing requests...\n"

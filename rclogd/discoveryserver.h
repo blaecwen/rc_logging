@@ -11,12 +11,22 @@
 namespace rclog {
 
 
+
 class DiscoveryServer
 {
 public:
-    DiscoveryServer(boost::asio::io_service& io_service,
-                    const std::string &multicast_address,
-                    short port, int interval);
+    struct params {
+        std::string multicast_address;
+        short multicast_port;
+
+        std::string node_id;
+        int priority;
+
+        int interval;                    // interval between hello messages
+        bool enable_loopback;
+    };
+
+    DiscoveryServer(boost::asio::io_service& io_service, const params &p);
 
     void handle_send_to(const boost::system::error_code &error);
     void handle_timeout(const boost::system::error_code &error);
@@ -29,7 +39,6 @@ private:
     boost::asio::deadline_timer timer_;
 
     int interval_;
-
     std::string hello_message_;
 
     enum { max_length = 1024 };
