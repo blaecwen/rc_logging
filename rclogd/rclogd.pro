@@ -20,12 +20,14 @@ SOURCES += main.cpp \
     localserver.cpp \
     databasemanager.cpp \
     mongomanager.cpp \
-    discoveryserver.cpp
+    discoveryserver.cpp \
+    logexchangeserver.cpp
 
 HEADERS += \
     localserver.h \
     databasemanager.h \
     mongomanager.h \
     utils.hpp \
-    discoveryserver.h
+    discoveryserver.h \
+    logexchangeserver.h
 

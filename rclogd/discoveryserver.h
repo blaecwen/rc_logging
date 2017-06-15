@@ -11,7 +11,6 @@
 namespace rclog {
 
 
-
 class DiscoveryServer
 {
 public:
