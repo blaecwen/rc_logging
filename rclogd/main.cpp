@@ -136,6 +136,7 @@ int main(int argc, char* argv[]) {
             std::cerr << "Warning: --socket-takeover option was specified. Taking over socket file '"
                       << socket << "'. This file could be used by other process." << "\n";
             ::unlink(socket.c_str());           // NOTE: is it correct behavior?
+            // may be SO_REUSEADDR could help here
         }
         boost::asio::io_service io_service;
         rclog::LocalServer s(io_service, socket, *dbManager);
