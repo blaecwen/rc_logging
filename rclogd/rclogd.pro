@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     databasemanager.cpp \
     mongomanager.cpp \
     discoveryserver.cpp \
-    logexchangeserver.cpp
+    logexchangeserver.cpp \
+    optionsparser.cpp
 
 HEADERS += \
     localserver.h \
@@ -29,5 +30,6 @@ HEADERS += \
     mongomanager.h \
     utils.hpp \
     discoveryserver.h \
-    logexchangeserver.h
+    logexchangeserver.h \
+    optionsparser.h
 
