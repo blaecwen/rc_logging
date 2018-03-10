@@ -157,17 +157,11 @@ int main(int argc, char* argv[]) {
         io_service.run();
 
     }
-    catch (po::unknown_option& e) {
+    catch (po::error& e) {
         std::cerr << "Error parsing command line or config file: " << e.what() << "\n";
         std::cerr << "try '" << argv[0] << " --help' for more information" << "\n";
         return 1;
     }
-    catch (po::required_option& e) {
-        std::cerr << "Error parsing command line or config file: " << e.what() << "\n";
-        std::cerr << "try '" << argv[0] << " --help' for more information" << "\n";
-        return 1;
-    }
-
     catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << "\n";
         return 1;

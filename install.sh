@@ -4,15 +4,18 @@
 
 
 function install {
+    # set -x
+    set -e
     echo "Installing rclogd..."
 
-    adduser --system rclog --group
+    adduser --system rclog --group --no-create-home
 
     mkdir -p /etc/rclog
     cp rclogd.cfg /etc/rclog
     chown -R rclog:rclog /etc/rclog
     chmod -R g+rw /etc/rclog
 
+    echo "Copying files..."
     cp build-rclogd/rclogd /usr/local/bin
     cp rclogd.service /etc/systemd/system
     systemctl enable rclogd.service
@@ -21,6 +24,7 @@ function install {
 }
 
 function uninstall {
+    # set -x
     echo "Uninstalling rclogd..."
 
     systemctl stop rclogd.service

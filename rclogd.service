@@ -1,6 +1,8 @@
 [Unit]
 Description=Robotic System Logging Service
 Documentation=https://github.com/blaecwen/rc_logging
+StartLimitIntervalSec=100
+StartLimitBurst=7
 
 [Service]
 Type=notify
@@ -8,6 +10,7 @@ User=rclog
 Group=rclog
 ExecStart=/usr/local/bin/rclogd -c /etc/rclog/rclogd.cfg
 Restart=on-failure
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
